@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Oswald:wght@300;400;500;600;700&family=Bebas+Neue&family=Anton&family=Staatliches&family=Archivo+Narrow:wght@400;500;600;700&display=swap');
 
 :root {
   font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -22,6 +22,10 @@ body {
   background: #000000;
   overflow-x: hidden;
   cursor: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 #root {
@@ -42,4 +46,42 @@ body {
 /* Gradient text */
 .gradient-text {
   color: rgba(255, 255, 255, 0.95);
+  transition: all 0.4s ease;
+}
+
+/* Text shimmer effect */
+@keyframes textShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.9) 25%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.9) 75%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 3s linear infinite;
+}
+
+/* Smooth text transitions */
+h1, h2, h3, h4, h5, h6, p, span {
+  transition: all 0.3s ease;
+}
+
+/* Allow text selection only where needed */
+input, textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }

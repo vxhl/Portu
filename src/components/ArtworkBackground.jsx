@@ -1,28 +1,24 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './ArtworkBackground.css'
 
 const ArtworkBackground = () => {
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const artworks = [
     'WhatsApp Image 2026-01-15 at 7.27.04 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.27.03 PM.jpeg',
-    'WhatsApp Image 2026-01-15 at 7.25.47 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.46 PM (1).jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.46 PM.jpeg',
-    'WhatsApp Image 2026-01-15 at 7.25.45 PM (1).jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.45 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.44 PM (1).jpeg',
-    'WhatsApp Image 2026-01-15 at 7.25.44 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.43 PM (2).jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.43 PM (1).jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.43 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.42 PM (2).jpeg',
-    'WhatsApp Image 2026-01-15 at 7.25.42 PM (1).jpeg',
-    'WhatsApp Image 2026-01-15 at 7.25.42 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.41 PM (1).jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.41 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.40 PM (2).jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.40 PM (1).jpeg',
-    'WhatsApp Image 2026-01-15 at 7.25.40 PM.jpeg',
     'WhatsApp Image 2026-01-15 at 7.25.39 PM.jpeg',
     'Screenshot from 2026-01-15 19-36-50.png',
     'Screenshot from 2026-01-15 19-37-40.png',
@@ -35,7 +31,6 @@ const ArtworkBackground = () => {
     'Screenshot from 2026-01-15 19-38-45.png',
     'Screenshot from 2026-01-15 19-38-52.png',
     'Screenshot from 2026-01-15 19-39-26.png',
-    'Screenshot from 2026-01-15 19-39-41.png',
     'Screenshot from 2026-01-15 19-40-11.png',
     'Screenshot from 2026-01-15 19-40-55.png',
     'Screenshot from 2026-01-15 19-41-01.png',
@@ -52,7 +47,7 @@ const ArtworkBackground = () => {
     'Screenshot from 2026-01-15 19-48-51.png'
   ]
 
-  // Spread out positions across entire viewport - more visible and organized
+  // Spread out positions across entire viewport - all images visible within 0-100%
   const positions = [
     { top: '2%', left: '3%', width: '220px', rotate: '-12deg', zIndex: 5 },
     { top: '8%', left: '25%', width: '250px', rotate: '8deg', zIndex: 3 },
@@ -76,31 +71,30 @@ const ArtworkBackground = () => {
     { top: '88%', left: '15%', width: '225px', rotate: '20deg', zIndex: 2 },
     { top: '85%', left: '45%', width: '195px', rotate: '-8deg', zIndex: 5 },
     { top: '90%', left: '75%', width: '215px', rotate: '18deg', zIndex: 4 },
-    { top: '105%', left: '5%', width: '205px', rotate: '-22deg', zIndex: 6 },
-    { top: '108%', left: '32%', width: '230px', rotate: '12deg', zIndex: 3 },
-    { top: '110%', left: '60%', width: '195px', rotate: '-16deg', zIndex: 5 },
-    { top: '105%', left: '85%', width: '180px', rotate: '24deg', zIndex: 7 },
-    { top: '125%', left: '10%', width: '220px', rotate: '-10deg', zIndex: 4 },
-    { top: '128%', left: '38%', width: '190px', rotate: '14deg', zIndex: 6 },
-    { top: '122%', left: '65%', width: '210px', rotate: '-19deg', zIndex: 3 },
-    { top: '142%', left: '8%', width: '185px', rotate: '21deg', zIndex: 8 },
-    { top: '145%', left: '35%', width: '235px', rotate: '-14deg', zIndex: 2 },
-    { top: '148%', left: '62%', width: '200px', rotate: '16deg', zIndex: 5 },
-    { top: '140%', left: '88%', width: '215px', rotate: '-23deg', zIndex: 4 },
-    { top: '162%', left: '12%', width: '195px', rotate: '9deg', zIndex: 7 },
-    { top: '165%', left: '40%', width: '225px', rotate: '-11deg', zIndex: 3 },
-    { top: '168%', left: '68%', width: '180px', rotate: '26deg', zIndex: 6 },
-    { top: '182%', left: '15%', width: '190px', rotate: '-17deg', zIndex: 5 },
-    { top: '185%', left: '42%', width: '210px', rotate: '13deg', zIndex: 4 },
-    { top: '188%', left: '70%', width: '220px', rotate: '-20deg', zIndex: 8 },
-    { top: '202%', left: '8%', width: '185px', rotate: '11deg', zIndex: 2 },
-    { top: '205%', left: '35%', width: '235px', rotate: '-24deg', zIndex: 3 },
-    { top: '208%', left: '63%', width: '195px', rotate: '19deg', zIndex: 6 },
-    { top: '200%', left: '88%', width: '205px', rotate: '-13deg', zIndex: 7 },
-    { top: '222%', left: '18%', width: '215px', rotate: '15deg', zIndex: 4 },
-    { top: '225%', left: '45%', width: '225px', rotate: '-21deg', zIndex: 5 },
-    { top: '228%', left: '72%', width: '190px', rotate: '17deg', zIndex: 3 },
-    { top: '242%', left: '25%', width: '180px', rotate: '-9deg', zIndex: 8 }
+    { top: '4%', left: '15%', width: '205px', rotate: '-22deg', zIndex: 6 },
+    { top: '12%', left: '60%', width: '230px', rotate: '12deg', zIndex: 3 },
+    { top: '6%', left: '90%', width: '195px', rotate: '-16deg', zIndex: 5 },
+    { top: '25%', left: '5%', width: '180px', rotate: '24deg', zIndex: 7 },
+    { top: '28%', left: '50%', width: '220px', rotate: '-10deg', zIndex: 4 },
+    { top: '32%', left: '85%', width: '190px', rotate: '14deg', zIndex: 6 },
+    { top: '45%', left: '12%', width: '210px', rotate: '-19deg', zIndex: 3 },
+    { top: '48%', left: '55%', width: '185px', rotate: '21deg', zIndex: 8 },
+    { top: '42%', left: '90%', width: '235px', rotate: '-14deg', zIndex: 2 },
+    { top: '62%', left: '18%', width: '200px', rotate: '16deg', zIndex: 5 },
+    { top: '65%', left: '58%', width: '215px', rotate: '-23deg', zIndex: 4 },
+    { top: '68%', left: '88%', width: '195px', rotate: '9deg', zIndex: 7 },
+    { top: '78%', left: '8%', width: '225px', rotate: '-11deg', zIndex: 3 },
+    { top: '82%', left: '42%', width: '180px', rotate: '26deg', zIndex: 6 },
+    { top: '80%', left: '75%', width: '190px', rotate: '-17deg', zIndex: 5 },
+    { top: '92%', left: '20%', width: '210px', rotate: '13deg', zIndex: 4 },
+    { top: '95%', left: '60%', width: '220px', rotate: '-20deg', zIndex: 8 },
+    { top: '10%', left: '35%', width: '185px', rotate: '11deg', zIndex: 2 },
+    { top: '14%', left: '72%', width: '235px', rotate: '-24deg', zIndex: 3 },
+    { top: '30%', left: '20%', width: '195px', rotate: '19deg', zIndex: 6 },
+    { top: '33%', left: '65%', width: '205px', rotate: '-13deg', zIndex: 7 },
+    { top: '50%', left: '15%', width: '215px', rotate: '15deg', zIndex: 4 },
+    { top: '53%', left: '50%', width: '225px', rotate: '-21deg', zIndex: 5 },
+    { top: '56%', left: '85%', width: '190px', rotate: '17deg', zIndex: 3 }
   ]
 
   const artworkRefs = useRef([])
@@ -175,30 +169,61 @@ const ArtworkBackground = () => {
     }
   }, [positions])
 
+  const handleImageDoubleClick = (artwork) => {
+    setSelectedImage(artwork)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setTimeout(() => setSelectedImage(null), 300) // Wait for animation to finish
+  }
+
   return (
-    <div className="artwork-background">
-      {artworks.map((artwork, index) => (
-        <div
-          key={index}
-          ref={(el) => (artworkRefs.current[index] = el)}
-          className="artwork-item"
-          style={{
-            top: positions[index].top,
-            left: positions[index].left,
-            right: positions[index].right,
-            width: positions[index].width,
-            transform: `rotate(${positions[index].rotate})`,
-            zIndex: positions[index].zIndex
-          }}
+    <>
+      <div className="artwork-background">
+        {artworks.map((artwork, index) => (
+          <div
+            key={index}
+            ref={(el) => (artworkRefs.current[index] = el)}
+            className="artwork-item"
+            style={{
+              top: positions[index].top,
+              left: positions[index].left,
+              right: positions[index].right,
+              width: positions[index].width,
+              transform: `rotate(${positions[index].rotate})`,
+              zIndex: positions[index].zIndex,
+              pointerEvents: 'auto'
+            }}
+            onDoubleClick={() => handleImageDoubleClick(artwork)}
+          >
+            <img 
+              src={`/src/assets/${artwork}`} 
+              alt={`Artwork ${index + 1}`}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div 
+          className={`artwork-modal ${isModalOpen ? 'open' : ''}`}
+          onClick={handleCloseModal}
         >
-          <img 
-            src={`/src/assets/${artwork}`} 
-            alt={`Artwork ${index + 1}`}
-            loading="lazy"
-          />
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={handleCloseModal}>×</button>
+            <img 
+              src={`/src/assets/${selectedImage}`} 
+              alt="Selected Artwork"
+              className="modal-image"
+            />
+          </div>
         </div>
-      ))}
-    </div>
+      )}
+    </>
   )
 }
 

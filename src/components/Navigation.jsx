@@ -7,11 +7,9 @@ const Navigation = ({ activeSection }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { id: 'hero', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'contact', label: 'Contact' },
+    { id: 'projects', label: 'projects' },
+    { id: 'about', label: 'about' },
+    { id: 'contact', label: 'contact' },
   ]
 
   const scrollToSection = (sectionId) => {
@@ -30,25 +28,21 @@ const Navigation = ({ activeSection }) => {
       transition={{ duration: 0.5 }}
     >
       <div className="nav-container">
-        <motion.div
-          className="logo"
-          whileHover={{ scale: 1.1 }}
-          onClick={() => scrollToSection('hero')}
-        >
-          <span className="gradient-text">Portfolio</span>
-        </motion.div>
+        <div className="logo" onClick={() => scrollToSection('hero')}>
+          <span className="logo-name">Bishal Mohari</span>
+          <span className="logo-divider">/</span>
+          <span className="logo-subtitle">DEVELOPER, ARTIST, GAMER</span>
+        </div>
 
         <div className={`nav-links ${isOpen ? 'open' : ''}`}>
           {navItems.map((item) => (
-            <motion.button
+            <button
               key={item.id}
               className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
               onClick={() => scrollToSection(item.id)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
             >
               {item.label}
-            </motion.button>
+            </button>
           ))}
         </div>
 

@@ -7,6 +7,11 @@
   justify-content: flex-start;
   overflow: hidden;
   padding-left: 2rem;
+  pointer-events: none;
+}
+
+.hero-container > * {
+  pointer-events: auto;
 }
 
 .hero-canvas {
@@ -27,6 +32,7 @@
   height: 100%;
   z-index: 1;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .gradient-orb {
@@ -224,16 +230,40 @@
 }
 
 .hero-content {
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
   z-index: 10;
-  text-align: left;
-  max-width: 1400px;
   width: 100%;
-  padding: 2rem;
-  margin: 0 auto;
+  padding: 0 0 0.5rem 0.5rem;
+  pointer-events: none;
+}
+
+.hero-content > * {
+  pointer-events: auto;
+}
+
+.hero-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: end;
+  max-width: 100%;
+  margin: 0;
+}
+
+.hero-left {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-right {
+  max-width: 450px;
+  padding-bottom: 2rem;
 }
 
 .availability-badge {
@@ -287,88 +317,108 @@
   padding: 0.3rem 0.8rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: labelSlideIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes labelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .label:hover {
   color: rgba(255, 255, 255, 1);
   border-color: rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px) scale(1.05);
+  letter-spacing: 0.08em;
+}
+
+.label:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.label:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.label:nth-child(5) {
+  animation-delay: 0.3s;
 }
 
 .label-divider {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.3);
   font-weight: 300;
+  animation: labelFadeIn 0.6s ease-out forwards;
+  opacity: 0;
 }
 
-.hero-main-title {
-  font-size: clamp(5rem, 15vw, 16rem);
+@keyframes labelFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.3;
+  }
+}
+
+
+
+.hero-bio {
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.6;
+  color: #EFEBE0;
   font-weight: 400;
-  line-height: 0.85;
-  margin-bottom: 2.5rem;
-  letter-spacing: -0.02em;
-  text-transform: none;
+  font-family: 'Archivo Narrow', sans-serif !important;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.title-line {
-  display: block;
-  color: #ffffff;
-  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.1);
+.creative-label {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Playfair Display', serif !important;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  z-index: 20;
+  margin-bottom: 4rem;
 }
 
-
-.hero-description {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 300;
-  max-width: 550px;
-  margin-bottom: 3rem;
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-}
-
-.skills-marquee {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
+.hero-title {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 2rem 0;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.95), transparent);
+  gap: 5.2rem;
+  line-height: 0.85;
+  position: relative;
+  z-index: 10;
 }
 
-.marquee-row {
-  display: flex;
-  gap: 3rem;
-  animation: marqueeScroll 25s linear infinite;
-  white-space: nowrap;
-}
-
-.marquee-row.reverse {
-  animation-direction: reverse;
-}
-
-.marquee-row span {
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.15);
+.title-artist,
+.title-developer,
+.title-gamer {
+  font-size: clamp(6rem, 18vw, 14rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: 'Anton', sans-serif !important;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-family: 'Playfair Display', serif;
-}
-
-@keyframes marqueeScroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+  letter-spacing: -0.04em;
+  line-height: 0.75;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 0.3rem;
+  transform: scaleX(0.75) scaleY(1.3);
+  transform-origin: left bottom;
 }
 
 .scroll-indicator {
@@ -387,6 +437,22 @@
   transform: rotate(45deg);
 }
 
+@media (max-width: 1024px) {
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .hero-right {
+    max-width: 100%;
+    padding-bottom: 0;
+  }
+
+  .hero-content {
+    padding: 0 0 0.5rem 0.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-container {
     padding-left: 1rem;
@@ -394,26 +460,18 @@
   }
 
   .hero-content {
-    text-align: center;
+    padding: 0 0 0.5rem 0.5rem;
+    text-align: left;
   }
 
-  .availability-badge {
-    top: 1rem;
-    right: 1rem;
-    font-size: 0.75rem;
+  .hero-left {
+    align-items: flex-start;
   }
 
-  .hero-main-title {
-    font-size: clamp(3.5rem, 18vw, 10rem);
-  }
-
-  .hero-labels {
-    gap: 0.5rem;
-  }
-
-  .label {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.6rem;
+  .title-artist,
+  .title-developer,
+  .title-gamer {
+    font-size: clamp(5rem, 15vw, 12rem);
   }
 
   .scroll-text-marquee {

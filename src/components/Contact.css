@@ -19,14 +19,41 @@
   text-transform: none;
   margin-bottom: 1rem;
   font-family: 'Playfair Display', serif;
+  transition: all 0.5s ease;
+  animation: titleSlideUp 0.8s ease-out forwards;
+}
+
+@keyframes titleSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .contact-intro {
   font-size: clamp(1.1rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 400;
   margin-bottom: 2rem;
   font-family: 'Cormorant Garamond', Georgia, serif;
+  transition: all 0.3s ease;
+  animation: textFadeIn 1s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+@keyframes textFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .contact-content {
@@ -45,7 +72,7 @@
 }
 
 .contact-info p {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.8;
   margin-bottom: 2rem;
   font-size: 1.1rem;
@@ -63,19 +90,25 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .social-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
   border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.05);
   color: #fff;
   transform: translateX(5px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
 }
 
 .social-icon {
@@ -90,13 +123,21 @@
 .social-link span {
   font-weight: 600;
   font-family: 'Playfair Display', serif;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover span {
+  letter-spacing: 0.05em;
 }
 
 .contact-form {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
   padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .form-group {
@@ -110,27 +151,39 @@
   font-weight: 600;
   font-size: 0.95rem;
   font-family: 'Playfair Display', serif;
+  transition: all 0.3s ease;
+}
+
+.form-group:focus-within label {
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  transform: translateX(3px);
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
   color: #fff;
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 .form-group input::placeholder,
@@ -141,22 +194,26 @@
 .submit-btn {
   width: 100%;
   padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
   color: white;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
 }
 
 .submit-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   transform: translateY(-2px);
 }
 

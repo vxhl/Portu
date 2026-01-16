@@ -24,17 +24,22 @@
 }
 
 .skill-category {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   padding: 1.5rem;
   transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .skill-category:hover {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
   border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
 }
 
 .category-title {
@@ -45,6 +50,13 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-family: 'Playfair Display', serif;
+  transition: all 0.4s ease;
+}
+
+.skill-category:hover .category-title {
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  transform: translateX(5px);
 }
 
 .skills-grid {
@@ -55,24 +67,31 @@
 
 .skill-item {
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
   text-align: center;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.9rem;
   font-family: 'Playfair Display', serif;
   letter-spacing: 0.02em;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .skill-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border-color: rgba(255, 255, 255, 0.4);
   color: white;
-  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px) scale(1.05);
+  letter-spacing: 0.05em;
 }
 
 @media (max-width: 768px) {
