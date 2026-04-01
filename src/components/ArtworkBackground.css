@@ -7,6 +7,14 @@
   z-index: 100;
   overflow: hidden;
   pointer-events: none;
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 1.2s cubic-bezier(.4,2,.6,1), transform 1.2s cubic-bezier(.4,2,.6,1);
+}
+.fade-in-artworks.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
 .artwork-item {

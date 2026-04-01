@@ -179,9 +179,17 @@ const ArtworkBackground = () => {
     setTimeout(() => setSelectedImage(null), 300) // Wait for animation to finish
   }
 
+  // Fade in artwork background after a delay (not on landing)
+  const [showArtworks, setShowArtworks] = useState(false)
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowArtworks(true), 1200)
+    return () => clearTimeout(timeout)
+  }, [])
+
   return (
     <>
-      <div className="artwork-background">
+      <div className={`artwork-background fade-in-artworks${showArtworks ? ' show' : ''}`}
+        style={{ pointerEvents: showArtworks ? 'auto' : 'none' }}>
         {artworks.map((artwork, index) => (
           <div
             key={index}
@@ -194,7 +202,9 @@ const ArtworkBackground = () => {
               width: positions[index].width,
               transform: `rotate(${positions[index].rotate})`,
               zIndex: positions[index].zIndex,
-              pointerEvents: 'auto'
+              pointerEvents: showArtworks ? 'auto' : 'none',
+              opacity: showArtworks ? undefined : 0,
+              transition: 'opacity 1.2s cubic-bezier(.4,2,.6,1), filter 0.3s ease',
             }}
             onDoubleClick={() => handleImageDoubleClick(artwork)}
           >

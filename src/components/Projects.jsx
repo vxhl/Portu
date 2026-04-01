@@ -1,10 +1,30 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa'
 import './Projects.css'
 
 const Projects = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null)
+  const containerRef = useRef(null)
+  // Fade in effect for artworks
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    const cards = Array.from(container.querySelectorAll('.project-card'))
+    cards.forEach((card, i) => {
+      card.style.opacity = 0
+      card.style.transform = 'translateY(60px)'
+    })
+    setTimeout(() => {
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.style.transition = 'opacity 1.2s cubic-bezier(.4,2,.6,1), transform 1.2s cubic-bezier(.4,2,.6,1)'
+          card.style.opacity = 1
+          card.style.transform = 'translateY(0)'
+        }, 400 + i * 220)
+      })
+    }, 400)
+  }, [])
 
   // Placeholder projects - you can replace these with your actual projects
   const projects = [
@@ -84,7 +104,7 @@ const Projects = () => {
   }
 
   return (
-    <div className="projects-container">
+    <div className="projects-container" ref={containerRef}>
       <motion.div
         className="projects-header"
         initial={{ opacity: 0, y: 30 }}

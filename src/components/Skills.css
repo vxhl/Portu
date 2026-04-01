@@ -10,11 +10,11 @@
   margin-bottom: 2rem;
 }
 
-.skills-header .section-title {
+ .skills-header .section-title {
   font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
+  font-weight: 900;
   margin-bottom: 0;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .skills-list {
@@ -42,14 +42,14 @@
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
 }
 
-.category-title {
+ .category-title {
   font-size: 1.3rem;
-  font-weight: 700;
+  font-weight: 900;
   margin-bottom: 1rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.97);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   transition: all 0.4s ease;
 }
 

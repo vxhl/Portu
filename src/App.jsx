@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import './App.css'
 import Hero from './components/Hero'
@@ -10,36 +10,37 @@ import Navigation from './components/Navigation'
 import CursorEffect from './components/CursorEffect'
 import ArtworkBackground from './components/ArtworkBackground'
 
+function useHorizontalScroll() {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const onWheel = (e) => {
+      // Always scroll horizontally, even if pointer is over artwork
+      if (e.deltaY === 0) return
+      e.preventDefault()
+      el.scrollTo({
+        left: el.scrollLeft + e.deltaY,
+        behavior: 'auto',
+      })
+    }
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [])
+  return ref
+}
+
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
+  const mainRef = useHorizontalScroll()
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['hero', 'about', 'projects', 'skills', 'contact']
-      const scrollPosition = window.scrollY + 100
-
-      for (const section of sections) {
-        const element = document.getElementById(section)
-        if (element) {
-          const { offsetTop, offsetHeight } = element
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section)
-            break
-          }
-        }
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   return (
     <div className="app">
       <ArtworkBackground />
       <CursorEffect />
       <Navigation activeSection={activeSection} />
-      <main>
+      <main ref={mainRef} tabIndex={0} style={{ outline: 'none' }}>
         <section id="hero">
           <Hero />
         </section>
@@ -56,7 +57,7 @@ function App() {
           <Contact />
         </section>
       </main>
-      </div>
+    </div>
   )
 }
 
