@@ -1,3 +1,4 @@
+
 .artwork-background {
   position: fixed;
   top: 0;
@@ -8,13 +9,20 @@
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
-  transform: translateX(80px);
+  transform: translateX(60vw);
   transition: opacity 1.2s cubic-bezier(.4,2,.6,1), transform 1.2s cubic-bezier(.4,2,.6,1);
 }
-.fade-in-artworks.show {
+
+.artwork-background.fade-in {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(0);
+}
+
+.artwork-background.fade-out {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(60vw);
 }
 
 .artwork-item {
@@ -96,7 +104,7 @@
   .artwork-item {
     opacity: 0.15;
   }
-  
+
   /* Hide some artworks on mobile for better performance */
   .artwork-item:nth-child(n+20) {
     display: none;
@@ -107,7 +115,7 @@
   .artwork-item {
     opacity: 0.12;
   }
-  
+
   /* Show even fewer on very small screens */
   .artwork-item:nth-child(n+12) {
     display: none;
@@ -204,7 +212,7 @@
     top: -60px;
     right: 10px;
   }
-  
+
   .modal-image {
     max-width: 95vw;
     max-height: 85vh;

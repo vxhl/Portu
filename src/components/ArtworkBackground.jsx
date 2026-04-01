@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import './ArtworkBackground.css'
 
-const ArtworkBackground = () => {
+export default function ArtworkBackground({ activeSection }) {
   const [selectedImage, setSelectedImage] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const artworks = [
@@ -98,76 +98,9 @@ const ArtworkBackground = () => {
   ]
 
   const artworkRefs = useRef([])
-  const mousePos = useRef({ x: 0, y: 0 })
-  const animationFrameId = useRef(null)
+  // Removed unused mousePos
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      mousePos.current = { x: e.clientX, y: e.clientY }
-    }
-
-    const animateArtworks = () => {
-      artworkRefs.current.forEach((artwork, index) => {
-        if (!artwork) return
-
-        const rect = artwork.getBoundingClientRect()
-        const artworkCenterX = rect.left + rect.width / 2
-        const artworkCenterY = rect.top + rect.height / 2
-
-        // Calculate distance from mouse to artwork center
-        const deltaX = mousePos.current.x - artworkCenterX
-        const deltaY = mousePos.current.y - artworkCenterY
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-
-        // Larger interaction radius for more floaty feel
-        const interactionRadius = 280
-
-        if (distance < interactionRadius) {
-          // Pause the CSS animation and apply mouse interaction
-          artwork.style.animationPlayState = 'paused'
-          
-          // Smooth balloon-like repulsion
-          const force = Math.pow((interactionRadius - distance) / interactionRadius, 1.2)
-          const repelX = -(deltaX / distance) * force * 150
-          const repelY = -(deltaY / distance) * force * 150
-          
-          // Add rotation for organic balloon effect
-          const rotationOffset = (deltaX / distance) * force * 12
-
-          // Apply transform with smooth, floaty transition
-          artwork.style.transition = 'transform 1.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease'
-          artwork.style.transform = `translate(${repelX}px, ${repelY}px) rotate(${parseFloat(positions[index].rotate) + rotationOffset}deg)`
-          
-          // Much brighter when interacting - shows artwork clearly
-          artwork.style.opacity = '0.65'
-          artwork.style.filter = 'grayscale(100%) contrast(1.3)'
-        } else {
-          // Resume floating animation
-          artwork.style.animationPlayState = 'running'
-          
-          // Return to normal opacity and filter
-          artwork.style.opacity = '0.25'
-          artwork.style.filter = 'grayscale(100%) contrast(1.2)'
-          
-          // Slow drift back with CSS animation
-          artwork.style.transition = 'transform 3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease, filter 0.8s ease'
-          artwork.style.transform = ''
-        }
-      })
-
-      animationFrameId.current = requestAnimationFrame(animateArtworks)
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    animationFrameId.current = requestAnimationFrame(animateArtworks)
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current)
-      }
-    }
-  }, [positions])
+  // No unused variables or effects
 
   const handleImageDoubleClick = (artwork) => {
     setSelectedImage(artwork)
@@ -179,54 +112,75 @@ const ArtworkBackground = () => {
     setTimeout(() => setSelectedImage(null), 300) // Wait for animation to finish
   }
 
-  // Fade in artwork background after a delay (not on landing)
-  const [showArtworks, setShowArtworks] = useState(false)
+
+  // Fade in artwork as user scrolls horizontally from hero to contact
+  const [artworkOpacity, setArtworkOpacity] = useState(0)
   useEffect(() => {
-    const timeout = setTimeout(() => setShowArtworks(true), 1200)
-    return () => clearTimeout(timeout)
+    const main = document.querySelector('main')
+    if (!main) return
+    const handleScroll = () => {
+      // Calculate how far user has scrolled horizontally (0 = hero, 1 = end)
+      const maxScroll = main.scrollWidth - main.clientWidth
+      const scrollLeft = main.scrollLeft
+      // Fade in between 0% and 40% of scroll (adjust as needed)
+      let fadeStart = 0
+      let fadeEnd = maxScroll * 0.4
+      let opacity = 0
+      if (scrollLeft <= fadeStart) opacity = 0
+      else if (scrollLeft >= fadeEnd) opacity = 1
+      else opacity = (scrollLeft - fadeStart) / (fadeEnd - fadeStart)
+      setArtworkOpacity(opacity)
+    }
+    main.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => main.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Use correct fade-in/fade-out class and Vite asset path
   return (
     <>
-      <div className={`artwork-background fade-in-artworks${showArtworks ? ' show' : ''}`}
-        style={{ pointerEvents: showArtworks ? 'auto' : 'none' }}>
+      <div
+        className="artwork-background fade-in"
+        style={{ pointerEvents: artworkOpacity > 0.01 ? 'auto' : 'none', opacity: artworkOpacity }}
+      >
         {artworks.map((artwork, index) => (
-          <div
-            key={index}
-            ref={(el) => (artworkRefs.current[index] = el)}
-            className="artwork-item"
-            style={{
-              top: positions[index].top,
-              left: positions[index].left,
-              right: positions[index].right,
-              width: positions[index].width,
-              transform: `rotate(${positions[index].rotate})`,
-              zIndex: positions[index].zIndex,
-              pointerEvents: showArtworks ? 'auto' : 'none',
-              opacity: showArtworks ? undefined : 0,
-              transition: 'opacity 1.2s cubic-bezier(.4,2,.6,1), filter 0.3s ease',
-            }}
-            onDoubleClick={() => handleImageDoubleClick(artwork)}
-          >
-            <img 
-              src={`/src/assets/${artwork}`} 
-              alt={`Artwork ${index + 1}`}
-              loading="lazy"
-            />
-          </div>
+          positions[index] ? (
+            <div
+              key={index}
+              ref={(el) => (artworkRefs.current[index] = el)}
+              className="artwork-item"
+              style={{
+                top: positions[index].top,
+                left: positions[index].left,
+                width: positions[index].width,
+                transform: `rotate(${positions[index].rotate})`,
+                zIndex: positions[index].zIndex,
+                pointerEvents: artworkOpacity > 0.01 ? 'auto' : 'none',
+                opacity: undefined,
+                transition: 'opacity 1.2s cubic-bezier(.4,2,.6,1), filter 0.3s ease',
+              }}
+              onDoubleClick={() => handleImageDoubleClick(artwork)}
+            >
+              <img
+                src={new URL(`../assets/${artwork}`, import.meta.url).href}
+                alt={`Artwork ${index + 1}`}
+                loading="lazy"
+              />
+            </div>
+          ) : null
         ))}
       </div>
 
       {/* Modal */}
       {isModalOpen && (
-        <div 
+        <div
           className={`artwork-modal ${isModalOpen ? 'open' : ''}`}
           onClick={handleCloseModal}
         >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close" onClick={handleCloseModal}>×</button>
-            <img 
-              src={`/src/assets/${selectedImage}`} 
+            <img
+              src={selectedImage ? new URL(`../assets/${selectedImage}`, import.meta.url).href : ''}
               alt="Selected Artwork"
               className="modal-image"
             />
@@ -236,6 +190,4 @@ const ArtworkBackground = () => {
     </>
   )
 }
-
-export default ArtworkBackground
 
