@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
 import { useRef, useState } from 'react'
 import './Artwork.css'
 
@@ -42,93 +42,96 @@ function getImageUrl(filename) {
 
 const Artwork = () => {
   const sectionRef = useRef(null)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [selectedArt, setSelectedArt] = useState(null)
 
+  /* Vertical scroll → horizontal translate */
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"]
   })
 
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const count = artworkFiles.length
-    const index = Math.min(count - 1, Math.floor(v * count))
-    setActiveIndex(index)
-  })
-
-  const progressPercent = ((activeIndex + 1) / artworkFiles.length) * 100
+  /* Total horizontal distance: (N cards × card width+gap) - viewport */
+  const totalCards = artworkFiles.length
+  const scrollX = useTransform(scrollYProgress, [0, 1], ['0%', `-${(totalCards - 2) * 18}%`])
+  const smoothX = useSpring(scrollX, { stiffness: 300, damping: 40 })
 
   return (
     <section className="artwork-scroll-wrapper" id="artwork" ref={sectionRef}>
       <div className="artwork-sticky">
         {/* Header */}
-        <div className="artwork-header">
-          <span className="section-marker">Artwork</span>
-          <h2 className="artwork-title">Creative Gallery</h2>
+        <div className="artwork-top-bar">
+          <div className="artwork-header">
+            <span className="section-marker">Artwork</span>
+            <h2 className="artwork-title">Creative Gallery</h2>
+          </div>
+          <span className="artwork-counter">
+            {String(totalCards).padStart(2, '0')} pieces
+          </span>
         </div>
 
-        <div className="artwork-layout">
-          {/* Left — Large featured image */}
-          <div className="artwork-featured">
-            <AnimatePresence mode="wait">
-              <motion.div
-                className="featured-image-wrap"
-                key={activeIndex}
-                initial={{ opacity: 0, scale: 0.95, y: 30 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -30 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-              >
-                <img
-                  src={getImageUrl(artworkFiles[activeIndex])}
-                  alt={`Artwork ${activeIndex + 1}`}
-                  className="featured-image"
-                  draggable={false}
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Right — Thumbnail strip + progress */}
-          <div className="artwork-sidebar">
-            <div className="artwork-sidebar-inner">
-              {/* Progress bar */}
-              <div className="artwork-progress">
-                <div className="artwork-progress-track">
-                  <motion.div
-                    className="artwork-progress-fill"
-                    animate={{ height: `${progressPercent}%` }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                  />
-                </div>
-                <span className="artwork-progress-count">
-                  {String(activeIndex + 1).padStart(2, '0')}
-                </span>
+        {/* Horizontal strip */}
+        <motion.div className="artwork-track" style={{ x: smoothX }}>
+          {artworkFiles.map((file, index) => (
+            <motion.div
+              key={index}
+              className="artwork-card"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: index * 0.02 }}
+              whileHover={{ y: -12, scale: 1.03 }}
+              onClick={() => setSelectedArt(index)}
+            >
+              <img
+                src={getImageUrl(file)}
+                alt={`Artwork ${index + 1}`}
+                loading="lazy"
+                draggable={false}
+              />
+              <div className="card-overlay">
+                <span className="card-number">{String(index + 1).padStart(2, '0')}</span>
               </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
-              {/* Thumbnail list */}
-              <div className="artwork-thumbs">
-                {artworkFiles.map((file, index) => (
-                  <motion.div
-                    key={index}
-                    className={`artwork-thumb ${index === activeIndex ? 'active' : ''}`}
-                    animate={{
-                      opacity: index === activeIndex ? 1 : 0.3,
-                      scale: index === activeIndex ? 1.05 : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <img
-                      src={getImageUrl(file)}
-                      alt={`Thumb ${index + 1}`}
-                      draggable={false}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
+        {/* Horizontal progress */}
+        <div className="artwork-hprogress">
+          <motion.div
+            className="artwork-hprogress-fill"
+            style={{ scaleX: scrollYProgress }}
+          />
         </div>
       </div>
+
+      {/* Fullscreen modal */}
+      <AnimatePresence>
+        {selectedArt !== null && (
+          <motion.div
+            className="artwork-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setSelectedArt(null)}
+          >
+            <motion.div
+              className="modal-card"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={getImageUrl(artworkFiles[selectedArt])}
+                alt="Artwork enlarged"
+              />
+              <button className="modal-close" onClick={() => setSelectedArt(null)}>✕</button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

@@ -19,7 +19,7 @@
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
@@ -101,6 +101,6 @@
 @media (max-width: 900px) {
   .nav { padding: 24px; }
   .nav-center { display: none; }
-  .logo-text { font-size: 2rem; }
-  .logo-icon { font-size: 1.75rem; }
+  .logo-icon { font-size: 1.5rem; }
+  .logo-text { font-size: 1.8rem; }
 }

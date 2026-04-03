@@ -35,9 +35,9 @@ const About = () => {
             const end = start + 0.12
 
             return (
-              <Word 
-                key={i} 
-                word={word} 
+              <Word
+                key={i}
+                word={word}
                 progress={scrollYProgress}
                 start={start}
                 end={end}
@@ -56,7 +56,7 @@ const Word = ({ word, progress, start, end, screenW }) => {
   const x = useTransform(progress, [start, end], [screenW + 200, 0])
 
   return (
-    <motion.span 
+    <motion.span
       className="about-word"
       style={{ opacity, x }}
     >

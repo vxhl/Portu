@@ -1,13 +1,11 @@
-/* ===== Scroll-Driven Creative Gallery ===== */
+/* ===== Horizontal-Scroll Creative Gallery ===== */
 
-/* Tall wrapper — height = 100vh × number of artworks (24), capped for UX */
 .artwork-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 2400vh; /* 24 artworks × 100vh each */
+  height: 400vh; /* scroll distance that maps to horizontal travel */
 }
 
-/* Sticky viewport */
 .artwork-sticky {
   position: sticky;
   top: 0;
@@ -19,195 +17,188 @@
   overflow: hidden;
 }
 
-/* ─── Header ─── */
+/* ─── Top bar ─── */
+.artwork-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 40px 60px 24px;
+  flex-shrink: 0;
+}
+
 .artwork-header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 40px 60px 20px;
-  flex-shrink: 0;
+  gap: 6px;
 }
 
 .artwork-header .section-marker {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.35);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
 }
 
 .artwork-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
   color: #fff;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
-/* ─── Main Layout ─── */
-.artwork-layout {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-/* ─── Left: Featured Image ─── */
-.artwork-featured {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px 60px;
-  overflow: hidden;
-}
-
-.featured-image-wrap {
-  width: 100%;
-  max-width: 800px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.featured-image {
-  width: 100%;
-  height: auto;
-  max-height: calc(100vh - 180px);
-  object-fit: contain;
-  border-radius: 6px;
-  filter: grayscale(20%);
-  transition: filter 0.4s ease;
-  user-select: none;
-}
-
-.featured-image:hover {
-  filter: grayscale(0%);
-}
-
-/* ─── Right: Sidebar (progress + thumbnails) ─── */
-.artwork-sidebar {
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 20px 24px;
-  overflow: hidden;
-}
-
-.artwork-sidebar-inner {
-  display: flex;
-  gap: 20px;
-  height: 100%;
-}
-
-/* Progress bar */
-.artwork-progress {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 4px 0;
-  flex-shrink: 0;
-}
-
-.artwork-progress-track {
-  width: 2px;
-  flex: 1;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 1px;
-  position: relative;
-  overflow: hidden;
-  min-height: 40px;
-}
-
-.artwork-progress-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: #fff;
-  border-radius: 1px;
-}
-
-.artwork-progress-count {
+.artwork-counter {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.3);
   letter-spacing: 0.05em;
 }
 
-/* Thumbnail strip */
-.artwork-thumbs {
-  flex: 1;
+/* ─── Horizontal track ─── */
+.artwork-track {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-  padding-right: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
+  gap: 20px;
+  padding: 30px 60px 40px;
+  flex: 1;
+  align-items: center;
+  will-change: transform;
 }
 
-.artwork-thumbs::-webkit-scrollbar {
-  width: 3px;
-}
-
-.artwork-thumbs::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 2px;
-}
-
-.artwork-thumb {
+/* ─── Card ─── */
+.artwork-card {
   flex-shrink: 0;
-  width: 100%;
-  border-radius: 4px;
+  width: clamp(240px, 18vw, 320px);
+  height: clamp(300px, 55vh, 480px);
+  border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: border-color 0.3s ease;
+  background: #141414;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.3s ease;
 }
 
-.artwork-thumb.active {
-  border-color: rgba(255, 255, 255, 0.35);
+.artwork-card:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
 }
 
-.artwork-thumb img {
+.artwork-card img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   pointer-events: none;
   user-select: none;
+  filter: grayscale(15%);
+  transition: filter 0.4s ease;
+}
+
+.artwork-card:hover img {
+  filter: grayscale(0%);
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  display: flex;
+  align-items: flex-end;
+}
+
+.card-number {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.08em;
+}
+
+/* ─── Horizontal progress bar ─── */
+.artwork-hprogress {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.artwork-hprogress-fill {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  transform-origin: left;
+}
+
+/* ─── Modal ─── */
+.artwork-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  cursor: pointer;
+  padding: 40px;
+  backdrop-filter: blur(8px);
+}
+
+.modal-card {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  cursor: default;
+}
+
+.modal-card img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.modal-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #fff;
 }
 
 /* ─── Responsive ─── */
 @media (max-width: 900px) {
-  .artwork-layout {
-    grid-template-columns: 1fr 180px;
+  .artwork-top-bar {
+    padding: 30px 24px 16px;
   }
 
-  .artwork-featured {
-    padding: 20px 30px;
+  .artwork-track {
+    padding: 20px 24px 30px;
+    gap: 14px;
   }
 
-  .artwork-header {
-    padding: 30px 30px 16px;
+  .artwork-card {
+    width: clamp(180px, 45vw, 260px);
+    height: clamp(240px, 45vh, 360px);
   }
 }
 
 @media (max-width: 600px) {
-  .artwork-layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-  }
-
-  .artwork-sidebar {
-    display: none;
-  }
-
-  .artwork-featured {
-    padding: 20px 24px;
-  }
-
-  .artwork-header {
-    padding: 24px 24px 12px;
+  .artwork-card {
+    width: clamp(150px, 55vw, 220px);
+    height: clamp(200px, 40vh, 300px);
   }
 }
