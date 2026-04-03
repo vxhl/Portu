@@ -1,69 +1,68 @@
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
 import './About.css'
 
 const About = () => {
-  const skills = [
-    'HTML',
-    'REACT',
-    'EXPRESS.JS',
-    'JAVASCRIPT',
-    'CSS',
-    'MONGODB',
-    'GIT',
-    'SASS',
-    'NEXT.JS',
-    'NODE.JS',
-    'PYTHON',
-    'TYPESCRIPT'
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end 0.4"]
+  })
+
+  const [screenW, setScreenW] = useState(1400)
+  useEffect(() => {
+    setScreenW(window.innerWidth)
+    const onResize = () => setScreenW(window.innerWidth)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  const words = [
+    "A", "passionate", "developer", "and", "digital", "artist,",
+    "I", "craft", "experiences", "that", "blend", "code,", "creativity,",
+    "and", "human", "emotion.", "My", "work", "spans", "full-stack",
+    "development,", "game", "design,", "and", "digital", "art", "—",
+    "always", "driven", "by", "curiosity", "and", "the", "pursuit",
+    "of", "meaningful", "craft."
   ]
 
   return (
-    <div className="about-container">
-      <div className="about-content">
-        <motion.div
-          className="about-text"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="about-section-title">About</h2>
-          <p>
-            I use my passion and skills to create digital products and experiences. 
-            I work with clients to design, implement, and manage their digital products. 
-            As a full stack developer, I bring together creativity, technology, and user 
-            experience to build solutions that matter. Committed to life-long learning 
-            and exploring new technologies.
-          </p>
-        </motion.div>
+    <section className="about" id="about" ref={sectionRef}>
+      <div className="about-text-container">
+        <p className="about-text">
+          {words.map((word, i) => {
+            const start = i / words.length * 0.6
+            const end = start + 0.12
 
-        <motion.div
-          className="skills-grid"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {skills.map((skill, index) => (
-            <motion.div
-              key={index}
-              className="skill-tag"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.3 + index * 0.03 }}
-            >
-              <span className="skill-tag-text">{skill}</span>
-              <span className="skill-tag-marquee" aria-hidden="true">
-                {Array(5).fill(skill).join(' · ')}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
+            return (
+              <Word 
+                key={i} 
+                word={word} 
+                progress={scrollYProgress}
+                start={start}
+                end={end}
+                screenW={screenW}
+              />
+            )
+          })}
+        </p>
       </div>
-    </div>
+    </section>
+  )
+}
+
+const Word = ({ word, progress, start, end, screenW }) => {
+  const opacity = useTransform(progress, [start, end], [0, 1])
+  const x = useTransform(progress, [start, end], [screenW + 200, 0])
+
+  return (
+    <motion.span 
+      className="about-word"
+      style={{ opacity, x }}
+    >
+      {word}
+    </motion.span>
   )
 }
 
 export default About
-

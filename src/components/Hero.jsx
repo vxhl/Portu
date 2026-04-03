@@ -1,246 +1,225 @@
-import { Canvas } from '@react-three/fiber'
-import { Stars } from '@react-three/drei'
-import { motion } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import './Hero.css'
 
-function Scene() {
+import profilePic from '../assets/WhatsApp Image 2026-01-15 at 7.25.39 PM.jpeg'
+
+/* ---- Magnetic character that repels from cursor ---- */
+const MagneticChar = ({ children, mouseX, mouseY }) => {
+  const ref = useRef(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const springX = useSpring(x, { stiffness: 150, damping: 15 })
+  const springY = useSpring(y, { stiffness: 150, damping: 15 })
+
+  useEffect(() => {
+    const unsubX = mouseX.on('change', () => {
+      if (!ref.current) return
+      const rect = ref.current.getBoundingClientRect()
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
+      const dx = mouseX.get() - cx
+      const dy = mouseY.get() - cy
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      const radius = 120
+      if (dist < radius) {
+        const force = (1 - dist / radius) * 28
+        x.set(-dx / dist * force)
+        y.set(-dy / dist * force)
+      } else {
+        x.set(0)
+        y.set(0)
+      }
+    })
+    return unsubX
+  }, [mouseX, mouseY, x, y])
+
+  if (children === '\n') return <br />
+  if (children === ' ') return <span className="headline-space">&nbsp;</span>
+
   return (
-    <>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
-      <Stars radius={100} depth={50} count={5000} factor={4} fade speed={1} />
-    </>
+    <motion.span
+      ref={ref}
+      className="headline-char"
+      style={{ x: springX, y: springY, display: 'inline-block' }}
+    >
+      {children}
+    </motion.span>
   )
 }
 
-const Hero = () => {
-  const containerRef = useRef(null)
-
-  // State for hover
-  // Each initial expands independently, with fade-out delay
-  // Only one initial can be expanded at a time
-  const [expanded, setExpanded] = useState('') // '' | 'B' | 'M'
-  const hoverTimeout = useRef(null)
+/* ---- Floating particles ---- */
+const FloatingParticles = () => {
+  const particles = Array.from({ length: 18 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 3 + 1,
+    duration: Math.random() * 8 + 6,
+    delay: Math.random() * 4,
+  }))
 
   return (
-    <div className="hero-container" ref={containerRef}>
-      <div className="hero-title-container simple initials">
-        <div className="hero-initials-orbit-container">
-          {expanded === '' ? (
-            <div className="orbit-text-svg circle">
-              <svg
-                width="120vw"
-                height="120vw"
-                viewBox="0 0 1200 1200"
-                style={{ display: 'block', position: 'absolute', left: 0, top: 0, width: '100%', height: '100%' }}
-              >
-                <defs>
-                  <path
-                    id="orbitPath"
-                    d={'M 600,600 m -500,0 a 500,500 0 1,1 1000,0 a 500,500 0 1,1 -1000,0'}
-                    fill="none"
-                  />
-                </defs>
-                <text fill="#ffe6a0" fontFamily="Montserrat, sans-serif" fontWeight="700" fontSize="2.8vw" letterSpacing="0.18em">
-                  <textPath
-                    href="#orbitPath"
-                    startOffset="0%"
-                    method="align"
-                    spacing="auto"
-                  >
-                    DEVELOPER ARTIST GAMER
-                  </textPath>
-                </text>
-              </svg>
-            </div>
-          ) : null}
-          </div>
-          <motion.h1
-            className="hero-initials-reveal larger"
-            initial={{ opacity: 0, y: 160, scaleY: 0.6, filter: 'blur(24px)' }}
-            animate={{ opacity: 1, y: 0, scaleY: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 1.3, ease: [0.4, 0, 0.2, 1] }}
-            style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 0, fontFamily: 'inherit' }}
-          >
-          {/* ...existing code for initials/hover-group... */}
-          </motion.h1>
-          {expanded !== '' && (
-            <motion.div
-              className="orbit-text-static-subheading"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 40 }}
-              transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'relative',
-                left: 0,
-                top: 0,
-                margin: '2.5vw 0 1.5vw 0',
-                zIndex: 10,
-                pointerEvents: 'none',
-              }}
-            >
-              <span className="snake-text" style={{ fontSize: '2.8vw', fontFamily: 'Montserrat, sans-serif', fontWeight: 700, color: '#ffe6a0', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
-                {Array.from('DEVELOPER ARTIST GAMER').map((char, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      display: 'inline-block',
-                      animation: `snake-wave 1.2s ${i * 0.06}s both`,
-                    }}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </span>
-                ))}
-              </span>
-            </motion.div>
-          )}
-          <motion.h1
-            className="hero-initials-reveal larger"
-            initial={{ opacity: 0, y: 160, scaleY: 0.6, filter: 'blur(24px)' }}
-            animate={{ opacity: 1, y: 0, scaleY: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 1.3, ease: [0.4, 0, 0.2, 1] }}
-            style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 0, fontFamily: 'inherit' }}
-          >
-          <span
-            className="hover-group"
-            onMouseEnter={() => {
-              if (hoverTimeout.current) {
-                clearTimeout(hoverTimeout.current)
-                hoverTimeout.current = null
-              }
-              setExpanded('B')
-            }}
-            onMouseLeave={() => {
-              if (hoverTimeout.current) clearTimeout(hoverTimeout.current)
-              hoverTimeout.current = setTimeout(() => {
-                setExpanded('')
-                hoverTimeout.current = null
-              }, 800)
-            }}
-            style={{ display: 'inline-block' }}
-          >
-            <motion.span
-              className="hero-initial hero-b"
-              layout
-              animate={expanded === 'B' ? { x: '-0.1em', scale: 1.12 } : { x: 0, scale: 1 }}
-              transition={{ type: 'spring', stiffness: 80, damping: 18, duration: 1.1 }}
-              style={{ display: 'inline-block', cursor: 'pointer', zIndex: 2, fontFamily: 'inherit', fontWeight: 800 }}
-            >
-              B
-            </motion.span>
-            <motion.span
-              className="hero-fullname-bishal"
-              initial={false}
-              animate={expanded === 'B' ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: -10, scale: 0.98 }}
-              transition={{ type: 'spring', stiffness: 60, damping: 16, duration: 0.9 }}
-              style={{
-                display: 'inline-block',
-                fontSize: 'inherit',
-                fontWeight: 800,
-                color: '#fff',
-                margin: 0,
-                padding: 0,
-                fontFamily: 'inherit',
-                letterSpacing: '-0.04em',
-                lineHeight: 1.1,
-                pointerEvents: 'auto',
-                verticalAlign: 'baseline',
-                position: 'relative',
-                left: expanded === 'B' ? 0 : '-0.1em',
-                zIndex: 1,
-                cursor: 'pointer',
-              }}
-            >
-              {expanded === 'B' ? 'ishal' : ''}
-            </motion.span>
-          </span>
-          <span
-            className="hover-group"
-            onMouseEnter={() => {
-              if (hoverTimeout.current) {
-                clearTimeout(hoverTimeout.current)
-                hoverTimeout.current = null
-              }
-              setExpanded('M')
-            }}
-            onMouseLeave={() => {
-              if (hoverTimeout.current) clearTimeout(hoverTimeout.current)
-              hoverTimeout.current = setTimeout(() => {
-                setExpanded('')
-                hoverTimeout.current = null
-              }, 800)
-            }}
-            style={{ display: 'inline-block' }}
-          >
-            <motion.span
-              className="hero-initial hero-m"
-              layout
-              animate={expanded === 'M' ? { x: '0.1em', scale: 1.12 } : { x: 0, scale: 1 }}
-              transition={{ type: 'spring', stiffness: 80, damping: 18, duration: 1.1 }}
-              style={{ display: 'inline-block', cursor: 'pointer', zIndex: 2, fontFamily: 'inherit', fontWeight: 800 }}
-            >
-              M
-            </motion.span>
-            <motion.span
-              className="hero-fullname-mohari"
-              initial={false}
-              animate={expanded === 'M' ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 10, scale: 0.98 }}
-              transition={{ type: 'spring', stiffness: 60, damping: 16, duration: 0.9 }}
-              style={{
-                display: 'inline-block',
-                fontSize: 'inherit',
-                fontWeight: 800,
-                color: '#fff',
-                margin: 0,
-                padding: 0,
-                fontFamily: 'inherit',
-                letterSpacing: '-0.04em',
-                lineHeight: 1.1,
-                pointerEvents: 'auto',
-                verticalAlign: 'baseline',
-                position: 'relative',
-                right: expanded === 'M' ? 0 : '-0.1em',
-                zIndex: 1,
-                cursor: 'pointer',
-              }}
-            >
-              {expanded === 'M' ? 'ohari' : ''}
-            </motion.span>
-          </span>
-          </motion.h1>
-        </div>
-
-        <div className="floating-action-btn-container">
-          <button
-            className="floating-action-btn"
-            aria-label="See My Work"
-            onClick={() => {
-              const nextSection = document.getElementById('projects')
-              if (nextSection) {
-                nextSection.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
-              }
-            }}
-          >
-            <span className="fab-icon">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="16" cy="16" r="15" stroke="#ffe6a0" strokeWidth="2" fill="#181818" />
-                <path d="M10 16h12" stroke="#ffe6a0" strokeWidth="2.5" strokeLinecap="round"/>
-                <path d="M18 12l4 4-4 4" stroke="#ffe6a0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
-            <span className="fab-tooltip">See My Work</span>
-          </button>
-        </div>
-      </div>
+    <div className="hero-particles">
+      {particles.map(p => (
+        <motion.div
+          key={p.id}
+          className="particle"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+          }}
+          animate={{
+            y: [0, -30, 0],
+            opacity: [0.15, 0.5, 0.15],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
     </div>
   )
 }
 
-export default Hero
+const Hero = () => {
+  const [currentTime, setCurrentTime] = useState('')
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
 
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date()
+      setCurrentTime(now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      }))
+    }
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleMouseMove = useCallback((e) => {
+    mouseX.set(e.clientX)
+    mouseY.set(e.clientY)
+  }, [mouseX, mouseY])
+
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 30 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay, ease: [0.25, 0.1, 0.25, 1] }
+  })
+
+  const headlineLines = [
+    'Code as balance',
+    'between structure',
+    'and emotion'
+  ]
+
+  return (
+    <section className="hero" id="hero" onMouseMove={handleMouseMove}>
+      <FloatingParticles />
+
+      {/* Gradient glow that follows cursor */}
+      <motion.div
+        className="hero-cursor-glow"
+        style={{
+          x: useTransform(mouseX, v => v - 200),
+          y: useTransform(mouseY, v => v - 200),
+        }}
+      />
+
+      {/* Top area: philosophy left, location right */}
+      <div className="hero-top">
+        <motion.div className="hero-philosophy" {...fadeUp(0.3)}>
+          <span className="philosophy-label">My creative philosophy</span>
+          <p className="philosophy-text">
+            I approach development through logic, systems,
+            and human emotion.
+          </p>
+          <p className="philosophy-text muted">
+            Every detail I craft carries clarity, intention,
+            and quiet confidence. That's how I design
+            and build websites that work — and feel right.
+          </p>
+        </motion.div>
+
+        <motion.div className="hero-meta" {...fadeUp(0.4)}>
+          <p className="meta-location">
+            Based in <strong>Bangalore</strong> · Worldwide <span className="meta-time">({currentTime})</span>
+          </p>
+          <p className="meta-origin">Born in <strong>Dibrugarh</strong> 🖤</p>
+        </motion.div>
+      </div>
+
+      {/* Divider + availability */}
+      <motion.div className="hero-divider-row" {...fadeUp(0.5)}>
+        <div className="hero-divider"></div>
+        <p className="hero-availability">
+          Available <span className="avail-highlight">for new projects</span>
+        </p>
+      </motion.div>
+
+      {/* Massive headline with cursor interaction */}
+      <motion.h1
+        className="hero-headline"
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        {headlineLines.map((line, li) => (
+          <span key={li} className="headline-line">
+            {line.split('').map((char, ci) => (
+              <MagneticChar key={`${li}-${ci}`} mouseX={mouseX} mouseY={mouseY}>
+                {char}
+              </MagneticChar>
+            ))}
+            {li < headlineLines.length - 1 && <br />}
+          </span>
+        ))}
+      </motion.h1>
+
+      {/* Bottom: device preview left, CTA right */}
+      <div className="hero-bottom">
+        <motion.div
+          className="hero-device"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <img src={profilePic} alt="Work preview" />
+        </motion.div>
+
+        <motion.div className="hero-cta" {...fadeUp(0.9)}>
+          <span className="cta-label">Let's build something that feels right</span>
+          <a href="#contact" className="cta-link">
+            Start a project
+            <span className="cta-underline"></span>
+          </a>
+        </motion.div>
+      </div>
+
+      {/* Scroll dots */}
+      <motion.div
+        className="hero-dots"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+      >
+        <span className="dot active"></span>
+        <span className="dot"></span>
+        <span className="dot"></span>
+        <span className="dot"></span>
+      </motion.div>
+    </section>
+  )
+}
+
+export default Hero

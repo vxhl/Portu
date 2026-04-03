@@ -1,63 +1,40 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { FaBars, FaTimes } from 'react-icons/fa'
 import './Navigation.css'
 
-const Navigation = ({ activeSection }) => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const navItems = [
-    { id: 'projects', label: 'projects' },
-    { id: 'about', label: 'about' },
-    { id: 'contact', label: 'contact' },
-  ]
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-      setIsOpen(false)
-    }
+const Navigation = () => {
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
     <motion.nav
-      className="navigation"
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
+      className="nav"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      <div className="nav-container">
-        <div className="logo" onClick={() => scrollToSection('hero')}>
-          <span className="logo-name">Bishal Mohari</span>
-          <span className="logo-divider">/</span>
-          <span className="logo-subtitle">DEVELOPER, ARTIST, GAMER</span>
-        </div>
-
-        <div className={`nav-links ${isOpen ? 'open' : ''}`}>
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-              onClick={() => scrollToSection(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-
-        <button
-          className="mobile-toggle"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </button>
+      <div className="nav-logo" onClick={() => scrollTo('hero')}>
+        <span className="logo-icon">✦</span>
+        <span className="logo-text">Bishal</span>
       </div>
+
+      <div className="nav-center">
+        <div className="nav-col">
+          <button onClick={() => scrollTo('projects')}>Projects</button>
+          <button onClick={() => scrollTo('about')}>About</button>
+          <button onClick={() => scrollTo('artwork')}>Artwork</button>
+        </div>
+        <div className="nav-col">
+          <button className="coming-soon">Blog <span>(Coming Soon)</span></button>
+          <button onClick={() => scrollTo('contact')}>Get in Touch</button>
+        </div>
+      </div>
+
+      <button className="nav-contact" onClick={() => scrollTo('contact')}>
+        Contact
+      </button>
     </motion.nav>
   )
 }
 
 export default Navigation
-
-

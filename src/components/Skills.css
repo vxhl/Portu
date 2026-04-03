@@ -1,102 +1,132 @@
-.skills-container {
+/* Skills - Sirnik Style */
+.skills {
+  width: 100vw;
+  min-height: 100vh;
+  height: 100vh;
+  background: #0a0a0a;
+  padding: 120px 60px 60px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.skills-content {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 2rem;
-}
-
-.skills-header {
-  text-align: left;
-  margin-bottom: 2rem;
-}
-
- .skills-header .section-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 900;
-  margin-bottom: 0;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.skills-list {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 80px;
+}
+
+/* Header */
+.skills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.skills-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skills-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Skills Grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
 }
 
 .skill-category {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-left: 24px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.skill-category:hover {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px) saturate(200%);
-  -webkit-backdrop-filter: blur(16px) saturate(200%);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
-}
-
- .category-title {
-  font-size: 1.3rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  color: rgba(255, 255, 255, 0.97);
+.category-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-family: 'Montserrat', sans-serif;
-  transition: all 0.4s ease;
+  margin: 0;
 }
 
-.skill-category:hover .category-title {
-  letter-spacing: 0.15em;
-  color: #ffffff;
-  transform: translateX(5px);
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 0.8rem;
+.category-item {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.125rem;
+  color: #fff;
+  position: relative;
+  padding-left: 0;
+  transition: all 0.3s ease;
+  cursor: default;
 }
 
-.skill-item {
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px) saturate(150%);
-  -webkit-backdrop-filter: blur(8px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  text-align: center;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.9rem;
-  font-family: 'Playfair Display', serif;
-  letter-spacing: 0.02em;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+.category-item::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
 }
 
-.skill-item:hover {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: white;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-  transform: translateY(-3px) scale(1.05);
-  letter-spacing: 0.05em;
+.category-item:hover::before {
+  width: 16px;
 }
 
-@media (max-width: 768px) {
+.category-item:hover {
+  padding-left: 12px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .skills {
+    padding: 100px 40px 40px;
+  }
+  
   .skills-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
   }
 }
 
+@media (max-width: 600px) {
+  .skills {
+    padding: 80px 24px 24px;
+  }
+  
+  .skills-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,155 +1,106 @@
-.navigation {
+.nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  background: transparent;
-  padding: 0 2rem;
-}
-
-.navigation::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 2rem;
-  right: 2rem;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.nav-container {
-  max-width: 100%;
-  margin: 0;
-  padding: 1rem 0;
+  z-index: 100;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
+  padding: 40px 60px;
+  pointer-events: none;
+  mix-blend-mode: difference;
 }
 
-.logo {
+.nav > * {
+  pointer-events: auto;
+}
+
+.nav-logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 14px;
   cursor: pointer;
-  user-select: none;
+  transition: opacity 0.3s ease;
 }
 
-.logo-name {
-  font-size: 16px;
-  font-weight: 400;
-  color: #EFEBE0;
-  font-family: 'Playfair Display', serif !important;
-  letter-spacing: normal;
-}
+.nav-logo:hover { opacity: 0.7; }
 
-.logo-divider {
-  font-size: 0.9rem;
-  color: #EFEBE0;
-  font-weight: 300;
-  opacity: 0.5;
-  font-family: 'Playfair Display', serif !important;
-}
-
-.logo-subtitle {
-  font-size: 13px;
-  font-weight: 400;
-  color: #EFEBE0;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-family: 'Playfair Display', serif !important;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.nav-link {
-  background: none;
-  border: none;
-  color: #EFEBE0;
-  font-size: 13px;
-  font-weight: 400;
-  cursor: pointer;
-  padding: 0;
-  transition: color 0.3s ease;
-  position: relative;
-  font-family: 'Playfair Display', serif !important;
-  letter-spacing: normal;
-  text-transform: lowercase;
-}
-
-.nav-link:hover {
-  color: #EFEBE0;
-}
-
-.nav-link.active {
-  color: #EFEBE0;
-}
-
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: #ffffff;
-}
-
-.mobile-toggle {
-  display: none;
-  background: none;
-  border: none;
+.logo-icon {
+  font-size: 2.5rem;
   color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
+  line-height: 1;
 }
 
-@media (max-width: 768px) {
-  .navigation {
-    padding: 0 1.5rem;
-  }
+.logo-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 3rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
 
-  .navigation::after {
-    left: 1.5rem;
-    right: 1.5rem;
-  }
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 80px;
+}
 
-  .nav-container {
-    padding: 1rem 0;
-  }
+.nav-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-  .mobile-toggle {
-    display: block;
-  }
+.nav-col button {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.3s ease;
+}
 
-  .nav-links {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  }
+.nav-col button:hover { opacity: 0.6; }
 
-  .nav-links.open {
-    transform: translateX(0);
-  }
+.nav-col button.coming-soon {
+  color: rgba(255, 255, 255, 0.6);
+}
 
-  .nav-link {
-    width: 100%;
-    text-align: center;
-  }
+.nav-col button.coming-soon span {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.nav-contact {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #0a0a0a;
+  background: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-contact:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.03);
+}
+
+@media (max-width: 900px) {
+  .nav { padding: 24px; }
+  .nav-center { display: none; }
+  .logo-text { font-size: 2rem; }
+  .logo-icon { font-size: 1.75rem; }
 }

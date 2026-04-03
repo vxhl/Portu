@@ -1,0 +1,213 @@
+/* ===== Scroll-Driven Creative Gallery ===== */
+
+/* Tall wrapper — height = 100vh × number of artworks (24), capped for UX */
+.artwork-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  height: 2400vh; /* 24 artworks × 100vh each */
+}
+
+/* Sticky viewport */
+.artwork-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─── Header ─── */
+.artwork-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 40px 60px 20px;
+  flex-shrink: 0;
+}
+
+.artwork-header .section-marker {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.artwork-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Main Layout ─── */
+.artwork-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ─── Left: Featured Image ─── */
+.artwork-featured {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 60px;
+  overflow: hidden;
+}
+
+.featured-image-wrap {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-image {
+  width: 100%;
+  height: auto;
+  max-height: calc(100vh - 180px);
+  object-fit: contain;
+  border-radius: 6px;
+  filter: grayscale(20%);
+  transition: filter 0.4s ease;
+  user-select: none;
+}
+
+.featured-image:hover {
+  filter: grayscale(0%);
+}
+
+/* ─── Right: Sidebar (progress + thumbnails) ─── */
+.artwork-sidebar {
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 20px 24px;
+  overflow: hidden;
+}
+
+.artwork-sidebar-inner {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+}
+
+/* Progress bar */
+.artwork-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  flex-shrink: 0;
+}
+
+.artwork-progress-track {
+  width: 2px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  position: relative;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.artwork-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 1px;
+}
+
+.artwork-progress-count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.05em;
+}
+
+/* Thumbnail strip */
+.artwork-thumbs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.artwork-thumbs::-webkit-scrollbar {
+  width: 3px;
+}
+
+.artwork-thumbs::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+}
+
+.artwork-thumb {
+  flex-shrink: 0;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 0.3s ease;
+}
+
+.artwork-thumb.active {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.artwork-thumb img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .artwork-layout {
+    grid-template-columns: 1fr 180px;
+  }
+
+  .artwork-featured {
+    padding: 20px 30px;
+  }
+
+  .artwork-header {
+    padding: 30px 30px 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .artwork-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .artwork-sidebar {
+    display: none;
+  }
+
+  .artwork-featured {
+    padding: 20px 24px;
+  }
+
+  .artwork-header {
+    padding: 24px 24px 12px;
+  }
+}
