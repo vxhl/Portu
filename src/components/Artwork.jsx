@@ -63,6 +63,28 @@ const Artwork = () => {
           <div className="artwork-header">
             <span className="section-marker">Artwork</span>
             <h2 className="artwork-title">Creative Gallery</h2>
+            <div className="artwork-brand">
+              <p className="artwork-brand-row">
+                <span className="artwork-brand-label">Studio</span>
+                <a
+                  href="https://www.instagram.com/artsynthya/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="artwork-handle"
+                >
+                  @artsynthya
+                </a>
+              </p>
+              <p className="artwork-brand-row">
+                <span className="artwork-brand-label">Commissions</span>
+                <a
+                  href="mailto:artysnthya@gmail.com?subject=Art%20Commission%20Inquiry"
+                  className="artwork-brand-link"
+                >
+                  artysnthya@gmail.com
+                </a>
+              </p>
+            </div>
           </div>
           <span className="artwork-counter">
             {String(totalCards).padStart(2, '0')} pieces

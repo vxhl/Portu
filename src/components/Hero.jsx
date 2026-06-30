@@ -130,6 +130,58 @@ const MagneticChar = ({ children, mouseX, mouseY }) => {
   )
 }
 
+/* ---- Infinite marquee (Awwwards-style skill ticker) ---- */
+const marqueeItems = [
+  'React', 'TypeScript', 'Three.js', 'Framer Motion', 'Design Systems',
+  'UI/UX', 'Node.js', 'Creative Code', 'WebGL', 'Figma',
+]
+
+const HeroMarquee = ({ reverse = false }) => (
+  <div className="hero-marquee" aria-hidden="true">
+    <div className={`hero-marquee-track${reverse ? ' reverse' : ''}`}>
+      {[...marqueeItems, ...marqueeItems].map((item, i) => (
+        <span key={`${item}-${i}`} className="hero-marquee-item">
+          {item}
+          <span className="hero-marquee-dot">✦</span>
+        </span>
+      ))}
+    </div>
+  </div>
+)
+
+/* ---- Floating orbit tags around focal point ---- */
+const orbitTags = [
+  { label: 'Frontend', style: { top: '12%', left: '4%' } },
+  { label: 'Creative Dev', style: { top: '8%', right: '6%' } },
+  { label: 'Motion', style: { bottom: '18%', left: '8%' } },
+  { label: 'Systems', style: { bottom: '14%', right: '4%' } },
+]
+
+const OrbitTags = () => (
+  <div className="hero-orbit-tags" aria-hidden="true">
+    {orbitTags.map((tag, i) => (
+      <motion.span
+        key={tag.label}
+        className="hero-orbit-tag"
+        style={tag.style}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          y: [0, -6, 0],
+        }}
+        transition={{
+          opacity: { delay: 1 + i * 0.12, duration: 0.5 },
+          scale: { delay: 1 + i * 0.12, duration: 0.5 },
+          y: { delay: 1.5 + i * 0.3, duration: 4 + i, repeat: Infinity, ease: 'easeInOut' },
+        }}
+      >
+        {tag.label}
+      </motion.span>
+    ))}
+  </div>
+)
+
 /* ---- Floating particles ---- */
 const FloatingParticles = () => {
   const particles = Array.from({ length: 18 }, (_, i) => ({
@@ -199,10 +251,17 @@ const Hero = () => {
     transition: { duration: 0.8, delay, ease: [0.25, 0.1, 0.25, 1] }
   })
 
-  const headlineLines = [
-    'Code as balance',
-    'between structure',
-    'and emotion'
+  const headlineParts = [
+    { text: 'Code as balance between ', emphasis: false },
+    { text: 'structure', emphasis: true },
+    { text: ' and ', emphasis: false },
+    { text: 'emotion', emphasis: true },
+  ]
+
+  const focalStats = [
+    { value: '15+', label: 'Projects' },
+    { value: '3+', label: 'Years' },
+    { value: '∞', label: 'Curiosity' },
   ]
 
   const [showGithubCard, setShowGithubCard] = useState(false)
@@ -240,10 +299,15 @@ const Hero = () => {
             onMouseEnter={() => setShowGithubCard(true)}
             onMouseLeave={() => setShowGithubCard(false)}
           >
-            <span className="meta-name">
+            <a
+              href="https://github.com/vxhl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="meta-name"
+            >
               <svg className="github-icon" viewBox="0 0 16 16" fill="currentColor" width="20" height="20"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
               Bishal Mohari
-            </span>
+            </a>
             <GitHubCard show={showGithubCard} />
           </div>
           <p className="meta-role">
@@ -268,24 +332,69 @@ const Hero = () => {
         </div>
       </motion.div>
 
-      {/* Main headline — catchy text with cursor interaction */}
-      <motion.h1
-        className="hero-headline"
-        initial={{ opacity: 0, y: 60 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      {/* Main focal zone — full-width center stage */}
+      <motion.div
+        className="hero-focal"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.55 }}
       >
-        {headlineLines.map((line, li) => (
-          <span key={li} className="headline-line">
-            {line.split('').map((char, ci) => (
-              <MagneticChar key={`${li}-${ci}`} mouseX={mouseX} mouseY={mouseY}>
-                {char}
-              </MagneticChar>
-            ))}
-            {li < headlineLines.length - 1 && <br />}
-          </span>
-        ))}
-      </motion.h1>
+        <span className="hero-focal-watermark" aria-hidden="true">BALANCE</span>
+        <div className="hero-focal-frame" aria-hidden="true">
+          <span className="frame-corner frame-tl" />
+          <span className="frame-corner frame-tr" />
+          <span className="frame-corner frame-bl" />
+          <span className="frame-corner frame-br" />
+        </div>
+
+        <OrbitTags />
+        <HeroMarquee />
+
+        <p className="hero-focal-eyebrow">Creative philosophy — 01</p>
+
+        <motion.h1
+          className="hero-headline"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          {headlineParts.map((part, pi) => (
+            <span key={pi} className={part.emphasis ? 'headline-emphasis' : 'headline-plain'}>
+              {part.text.split('').map((char, ci) => (
+                <MagneticChar key={`${pi}-${ci}`} mouseX={mouseX} mouseY={mouseY}>
+                  {char}
+                </MagneticChar>
+              ))}
+            </span>
+          ))}
+        </motion.h1>
+
+        <motion.p
+          className="hero-focal-sub"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.85 }}
+        >
+          Full-stack developer building interfaces where precision meets feeling —
+          from design systems to interactive experiences that breathe.
+        </motion.p>
+
+        <motion.div
+          className="hero-focal-stats"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.95 }}
+        >
+          {focalStats.map((stat) => (
+            <div key={stat.label} className="focal-stat">
+              <span className="focal-stat-value">{stat.value}</span>
+              <span className="focal-stat-label">{stat.label}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        <HeroMarquee reverse />
+      </motion.div>
 
       {/* Bottom: device preview left, CTA right */}
       <div className="hero-bottom">

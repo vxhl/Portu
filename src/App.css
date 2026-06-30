@@ -6,6 +6,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 body {
@@ -14,13 +16,17 @@ body {
   color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 .app {
   position: relative;
   width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   background: #0a0a0a;
+  overflow-x: clip;
 }
 
 main {

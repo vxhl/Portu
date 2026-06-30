@@ -12,9 +12,9 @@ const Contact = () => {
 
   const links = [
     { name: 'GitHub', url: 'https://github.com/vxhl' },
+    { name: 'Instagram', url: 'https://www.instagram.com/artsynthya/' },
     { name: 'LinkedIn', url: 'https://linkedin.com' },
-    { name: 'Twitter', url: 'https://twitter.com' },
-    { name: 'Email', url: 'mailto:hello@example.com' }
+    { name: 'Email', url: 'mailto:artysnthya@gmail.com' }
   ]
 
   return (
